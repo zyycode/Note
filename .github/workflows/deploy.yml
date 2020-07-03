@@ -21,6 +21,6 @@ jobs:
     #   with:
     #     version: ${{ matrix.node_version }}
 
-    - name: npm install
+    - name: yarn install
       run: 
-        npm install
+        yarn install
