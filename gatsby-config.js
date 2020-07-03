@@ -1,7 +1,7 @@
 module.exports = {
   pathPrefix: '/Note',
   siteMetadata: {
-    title: `Gatsby Starter Blog`,
+    title: `zyycode note`,
     author: {
       name: `zyycode`,
       summary: `who lives and works in San Francisco building useful things.`,
