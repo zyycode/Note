@@ -1,8 +1,9 @@
 module.exports = {
+  pathPrefix: '/Note',
   siteMetadata: {
     title: `Gatsby Starter Blog`,
     author: {
-      name: `张洋洋`,
+      name: `zyycode`,
       summary: `who lives and works in San Francisco building useful things.`,
     },
     description: `A starter blog demonstrating what Gatsby can do.`,
@@ -63,7 +64,7 @@ module.exports = {
       options: {
         name: `Gatsby Starter Blog`,
         short_name: `GatsbyJS`,
-        start_url: `/`,
+        start_url: `/Note`,
         background_color: `#ffffff`,
         theme_color: `#663399`,
         display: `minimal-ui`,
