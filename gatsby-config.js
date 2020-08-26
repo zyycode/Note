@@ -1,10 +1,10 @@
 module.exports = {
   pathPrefix: '/Note',
   siteMetadata: {
-    title: `zyycode note`,
+    title: `Blog`,
     author: {
-      name: `zyycode`,
-      summary: `who lives and works in San Francisco building useful things.`,
+      name: `zhangyangyang`,
+      summary: `who lives and works in HangZhou building useful things.`,
     },
     description: `A starter blog demonstrating what Gatsby can do.`,
     siteUrl: `https://zyycode.github.com/Note`,
