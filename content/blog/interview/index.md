@@ -18,6 +18,8 @@ description: "准备总结"
 
 #### 1.1 提炼函数 <-> 内联函数
 
+**提炼函数**
+
 提炼函数。将一些常用的代码放进独立的函数，从复用的角度来看，只要被用过不止一次的代码，就应该单独放进一个函数。最合理的观点是“将意图与实现分开”：如果你需要时间浏览一段代码才能弄秦它到底在干什么，那么就应该将其提炼到一个函数，并根据它所做的事为其命名。
 ```js
 // ------------- before ---------------------
@@ -69,3 +71,54 @@ function calculateOutstanding(invoice) {
 }
 ```
 
+**内联函数**
+
+当有些函数内部的代码和函数名称同样清晰易读，那就可以去掉这个函数直接使用函数内的代码。还有若函数组织不合理(复杂函数)，可以将它们都内联到一个大的函数里，再以自己喜欢的方式提炼出小函数。
+重点在于始终小步前进。
+
+```js
+// ------------- before ----------------------
+function rating(aDriver) {
+  return moreThanFiveLateDeliveries(aDriver) ? 2 : 1;
+}
+
+function moreThanFiveLateDeliveries(dvr) {
+  return dvr.numberOfLateDeliveries > 5;
+}
+// ------------- after -----------------------
+function rating(aDriver) {
+  return aDriver.numberOfLateDeliveries > 5 ? 2 : 1;
+}
+```
+
+#### 1.2 提炼变量 <-> 内联变量
+
+**提炼变量**
+
+表达式有可能非常复杂难以阅读，局部变量可以将逻辑进行分解使得更好的阅读。在使用提炼变量的时候意味着需要将表达式命名，需要考虑这个名字所处的上下文。
+
+```js
+// ------------- before ----------------------
+function price(order) {
+  // price is base price - quantity discount + shipping
+  return order.quantity * order.itemPrice - 
+    Math.max(0, order.quantity - 500) * order.itemPrice * 0.05 +
+    Math.min(order.quantity * order.itemPrice * 0.1, 100);
+}
+// ------------- after -----------------------
+function price(order) {
+  // 底价
+  const basePrice = order.quantity * order.itemPrice;
+  // 批发折扣
+  const quantityDiscount = Math.max(0, order.quantity - 500) * order.itemPrice * 0.05;
+  // 运费
+  const shipping = Math.min(basePrice * 0.1, 100);
+  return basePrice - quantityDiscount + shipping;
+}
+```
+
+**内联变量**
+
+当变量的名字并不比表达式本身更具表现力，这时候就是和用内联的方法消除变量。
+
+#### 1.3 改变函数声明
