@@ -1,0 +1,57 @@
+---
+title: Snabbdom 源码
+date: "2020-08-31 23:18:49"
+description: 分享
+---
+
+今天我分享的内容是 snabbdom 源码分析。[官方](https://github.com/snabbdom/snabbdom)是这么介绍的：
+> A virtual DOM library with focus on simplicity, modularity, powerful features and performance.
+
+一个具有简单性、模块化、强大的功能和性能的虚拟DOM库。那什么是虚拟 DOM，以及为什么要使用虚拟 DOM 呢？
+
+### Virtual DOM
+
+> 由普通的 JS 对象来描述 DOM 对象，因为不是真的 DOM 对象，所以叫 Virtual DOM。
+
+真实的 DOM
+```js
+const ele = document.querySelector('.logged-in')
+let s = ''
+for (const key in ele) {
+  s += key + ',
+}
+console.log(s)
+```
+虚拟 DOM
+```js
+{
+  el: 'div,
+  data: {},
+  text: 'Hello World',
+  children: [],
+  key: undefined,
+}
+```
+
+**为什么要使用虚拟 DOM**
+
+- 手动操作 DOM 比较麻烦，还需要考虑浏览器的兼容性，虽然有 jQuery 这样的库简化DOM操作，但随着项目的复杂DOM操作复杂提升。
+- 为了简化 DOM 操作出现了各种 MVVM 框架，解决了视图和状态同步问题。
+- 为了简化视图的操作可以使用模板引擎，但是模板引擎没有解决跟踪状态变化的问题，于是 Virtual DOM 出现了。
+- [Virtual DOM](https://github.com/Matt-Esch/virtual-dom) 的好处是当状态改变时不需要立即更新 DOM，只需要创建一个虚拟树来描述 DOM，Virtual DOM 内部来更有效的更新 DOM (diff)。
+  - 虚拟 DOM 可以维护程序的状态，跟踪上一次的状态。
+  - 通过比较前后两次状态的差异更新真实 DOM。
+
+**虚拟 DOM 的作用**
+
+- 维护视图和状态的关系
+- 复杂视图情况下提升渲染性能
+- 出来渲染真实 DOM 外，还可以实现 SSR(Nuxt.js/Next.js)、原生应用(Weex/React Native)、小程序(mpvue/uni-app)等
+
+> 举个操作真实 DOM 和虚拟 DOM 差异的例子。
+
+<!-- - 创建虚拟 DOM 的成本要比真实 DOM 低很多。 -->
+
+### Snabbdom 基本使用
+
+Snabbdom 的引入方式(ES6 模块和 Common JS 的差异)，同时 v1 版本有所区别。
