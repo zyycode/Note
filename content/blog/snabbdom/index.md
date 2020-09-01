@@ -55,3 +55,55 @@ console.log(s)
 ### Snabbdom 基本使用
 
 Snabbdom 的引入方式(ES6 模块和 Common JS 的差异)，同时 v1 版本有所区别。
+
+snabbdom 主要就几个函数
+
+`init` 是一个高阶函数，返回 `patch` 函数。
+
+模块：官方提供了6个模块，attitudes props class dataset eventlisteners style
+
+### Snabbdom 源码分析
+
+**如何学习源码：**
+
+- 先宏观了解
+- 带着目标看源码
+- 看源码的过程要不求甚解
+- 调试
+- 参考资料（比如网上其他源码分析的文章）
+
+**Snabbdom 的核心：**
+
+- 使用`h`函数创建 JavaScript 对象（VNode）描述真实 DOM
+- `init`设置模块，创建`patch`
+- `patch`比较新旧两个 VNode
+- 把变化的内容更新到真实的 DOM 树上
+
+#### h 函数
+
+Vue 中就有 h 函数
+```js
+new Vue({
+  render: h => h(App)
+}).$mount('#app')
+```
+
+**函数的重载：** 
+- 参数个数或类型不同的函数
+- JavaScript 中没有重载的概念
+- TypeScript 中有重载，不过重载的实现还是通过代码调整参数
+
+示例：
+```js
+function add(a, b) {
+  return a + b
+}
+
+function add(a, b, c) {
+  return a + b + c
+}
+
+add(1 + 2)
+add(1 + 2 + 3)
+
+```
