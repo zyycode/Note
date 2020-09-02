@@ -4,14 +4,14 @@ date: "2020-08-31 23:18:49"
 description: 分享
 ---
 
-今天我分享的内容是 snabbdom 源码分析。[官方](https://github.com/snabbdom/snabbdom)是这么介绍的：
+[官方](https://github.com/snabbdom/snabbdom)是这么介绍 Snabbdom 的：
 > A virtual DOM library with focus on simplicity, modularity, powerful features and performance.
 
-一个具有简单性、模块化、强大的功能和性能的虚拟DOM库。那什么是虚拟 DOM，以及为什么要使用虚拟 DOM 呢？
+一个具有简单性、模块化、强大的功能和性能的虚拟 DOM 库。那什么是虚拟 DOM，以及为什么要使用虚拟 DOM 呢？
 
 ### Virtual DOM
 
-> 由普通的 JS 对象来描述 DOM 对象，因为不是真的 DOM 对象，所以叫 Virtual DOM。
+> 由普通的 JS 对象来描述 DOM 对象，是对真实 DOM 的一种抽象，因为不是真的 DOM 对象，所以叫 Virtual DOM。
 
 真实的 DOM
 ```js
@@ -33,16 +33,16 @@ console.log(s)
 }
 ```
 
-**为什么要使用虚拟 DOM**
+**为什么要使用 Virtual DOM**
 
-- 手动操作 DOM 比较麻烦，还需要考虑浏览器的兼容性，虽然有 jQuery 这样的库简化DOM操作，但随着项目的复杂DOM操作复杂提升。
+- 手动操作 DOM 比较麻烦，虽然有 jQuery 这样的库简化DOM操作，但没有解决大批量操作 DOM 的性能问题（虽然可以使用一些技巧，比如试用 DocumentFragment 将多次 DOM 操作进行一次挂载，但是这样随着项目体积的增加，维护起来非常痛苦）。
 - 为了简化 DOM 操作出现了各种 MVVM 框架，解决了视图和状态同步问题。
-- 为了简化视图的操作可以使用模板引擎，但是模板引擎没有解决跟踪状态变化的问题，于是 Virtual DOM 出现了。
+- 简化视图的操作可以使用模板引擎，但是模板引擎没有解决跟踪状态变化的问题，于是 Virtual DOM 出现了。
 - [Virtual DOM](https://github.com/Matt-Esch/virtual-dom) 的好处是当状态改变时不需要立即更新 DOM，只需要创建一个虚拟树来描述 DOM，Virtual DOM 内部来更有效的更新 DOM (diff)。
   - 虚拟 DOM 可以维护程序的状态，跟踪上一次的状态。
   - 通过比较前后两次状态的差异更新真实 DOM。
 
-**虚拟 DOM 的作用**
+**Virtual DOM 的作用**
 
 - 维护视图和状态的关系
 - 复杂视图情况下提升渲染性能
@@ -50,7 +50,11 @@ console.log(s)
 
 > 举个操作真实 DOM 和虚拟 DOM 差异的例子。
 
-<!-- - 创建虚拟 DOM 的成本要比真实 DOM 低很多。 -->
+**Virtual DOM 需要解决的问题**
+
+- 高效的 diff 算法，即两个 Virtual DOM 的比较
+- 只更新需要更新的 DOM 节点
+- 数据变化检测，批量 DOM 读写操作等等
 
 ### Snabbdom 基本使用
 
@@ -79,7 +83,15 @@ snabbdom 主要就几个函数
 - `patch`比较新旧两个 VNode
 - 把变化的内容更新到真实的 DOM 树上
 
+#### init 函数
+
+#### patch 函数
+
+比较新旧两个 VDOM 树并更新
+
 #### h 函数
+
+返回一个 vnode 对象。
 
 Vue 中就有 h 函数
 ```js
