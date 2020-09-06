@@ -132,3 +132,23 @@ add(1 + 2 + 3)
 - diff 过程只进行同层级比较
 
 [React Diff 算法]()
+
+#### createElm 函数
+
+把 vnode 转化为 DOM 元素。
+
+createElm
+  - 触发用户钩子函数 init
+  - 把 vnode 转换为 DOM 对象，存储到 vnode.elm 中（没有渲染到页面）
+    - sel 是 !
+      - 创建注释节点
+    - sel 不为空
+      - 创建对应的 DOM 对象
+      - 触发模块的的狗子函数 create
+      - 创建所有子节点对用的 DOM 对象
+      - 触发用户的的钩子函数 create
+      - 如果 vnode 有 insert 钩子函数，追加到队列
+    - sel 为空
+      - 创建文本节点
+  - 返回 vnode
+  
