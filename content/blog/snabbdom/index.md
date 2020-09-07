@@ -151,4 +151,23 @@ createElm
     - sel 为空
       - 创建文本节点
   - 返回 vnode
-  
+
+#### patchVnode 函数
+
+patchVnode
+ - 触发 prepatch 钩子函数
+ - 触发 update 钩子函数
+ - 新节点有 text 属性，且不等于旧节点的 text 属性
+   - 如果老节点有 children
+     - 移除老节点 children 对应的 DOM 元素
+   - 设置新节点对应 DOM 元素的 textContent
+ - 新老节点都有 children， 且不相等
+   - 调用 updateChildren()
+   - 对比子节点，并且更新子节点的差异
+ - 只有新节点有 children 属性
+   - 如果老节点有 text 属性
+     - 清空对应 DOM 元素的 textContent
+   - 添加所有子节点
+ - 只有老节点有 chidlren 属性
+ - 只有老节点有 text 属性
+ - 触发 postpatch 钩子函数
