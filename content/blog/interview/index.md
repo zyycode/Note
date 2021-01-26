@@ -420,7 +420,11 @@ export default useAxios
 - 学习成本高，不易理解
 - 只能传递纯函数，而默认情况下纯函数有限
 
-### React Hooks 逻辑复用
+### React Hooks 做组件逻辑复用的优点
+
+- 完全符合 Hooks 原有规则，没有其他要求，易理解记忆
+- 变量作用域明确
+- 不会产生组件嵌套
 
 ```jsx
 import { useState, useEffect } from "react"
@@ -443,3 +447,18 @@ function useMousePositon() {
 
 export default useMousePositon
 ```
+
+### React Hooks 注意事项
+
+- useState 初始化值 ，只有第一次有效
+- useEffect 内部不能修改 state（依赖为空时，即模拟 DidMount ，re-render 不会重新执行 effect 函数）
+- useEffect 可能出现死循环（依赖中有引用类型）
+
+### 为什么会有 React Hooks，解决了什么问题？
+
+- 完善函数组件的能力，函数组件更适合 React 组件
+- 组件逻辑复用，Hooks 表现更好
+- class 组件正在变得费解，不易拆解，不易测试，逻辑混乱
+  - DidMount 和 DidUpdate 中获取数据
+  - DidMount 绑定事件，WillUnMount 解绑事件
+  - 使用 Hooks ，相同的逻辑可分割到一个一个 useEffect 中
