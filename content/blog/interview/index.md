@@ -154,9 +154,9 @@ patch 被拆分为两个阶段：
 - 都是数据驱动视图
 - 都是使用 vdom 操作 DOM
 
-- React 使用 JSX 拥抱 JS， Vue 使用末班拥抱 html
+- React 使用 JSX 拥抱 JS， Vue 使用模板拥抱 html
 - React 函数式编程，Vue 声明式编程
-- React 更更多需要自力更生，Vue 把想要的都给你
+- React 更多需要自力更生，Vue 把想要的都给你
 
 ### webpack 高级配置
 
@@ -785,16 +785,66 @@ const middlewares = [
   },
 ]
 
-function compose(middlewares) {
+/**
+ * compose `middleware` returnning
+ * a fully vailed middleware comprised
+ * of all those which are passed.
+ * 将所有中间件组合，返回一个包含所有传入中间件的函数。
+ * https://github.com/HXWfromDJTU/blog/issues/11
+ * @param {Array} middleware
+ * @return {Function}
+ */
+function compose(middleware) {
+  // 传入的 middleware 必须为数组
+  if (Array.isArray(middleware))
+    throw new TypeError("Middleware stack must be array!")
+  // 任意数组元素必须问函数
+  for (const fn of middleware) {
+    if (typeof fn !== "function")
+      throw new TypeError("Middleware must be composed of functions!")
+  }
+
+  // 返回一个每个中间件一次串联的函数闭包
+  // 其实第一次调用 return fnMiddleware(ctx).then(handleResponse).catch(onerror);
+  // 时并没有传入第二个next参数，当然也传入不了
   return function(context, next) {
-    dispatch(0)
+    // last called middleware #
+    // 这里的 index 是用于防止一个中间件里重复调用 next() 函数，初始值设为 -1
+    let inext = -1
+
+    // 启动递归，遍历所有中间件
+    return dispatch(0)
+
+    // 递归包裹每一个中间件，并且返回一个 Promise 对象
     function dispatch(i) {
-      let fn = middlewares[i]
-      if (i === middlewares.length) fn = next
+      // 注意随着 next() 执行，i、index + 1、当前中间件的执行下标，在进入每个中间件的时候回相等
+      // 每执行一次 next (或者dispatch) 上面三个值都会加 1
+
+      /** 原理说明：
+       * 当一个中间件调用了两次 next 方法，第一次 next 调用完，洋葱模型走完，index 的值从 -1 变成 middleware.length,
+       * 此时第一个某个中间件中的 next 再被调用，那么当时传入的 i + 1 的值，必定是 <= middlewares.length 的
+       */
+      if (i <= index)
+        return Promise.reject(new Error("next() called mutilple times."))
+
+      // 通过校验后 index 与 i 同步
+      index = i
+
+      // 取出一个中间件函数
+      let fn = middleware[i]
+
+      // 若执行到了最后一个，(其实此时的next也一定为undefined),我认为作者是为配合下一句一起判断中间件的终结
+      // 这条语句的作用是什么？
+      if (i === middleware.length) fn = next
+      // 遍历到了最后一个中间件，则返回一个 resolve 状态的 Promise 对象
       if (!fn) return Promise.resolve()
+
       try {
+        // 递归执行每一个中间件，当前中间件的 第二个 入参为下一个中间件的 函数句柄
+        // 这里注意：每一个 next 函数，都是下一个 dispatch 函数，而这个函数会返回一个 Promise 对象
         return Promise.resolve(fn(context, dispatch.bind(null, i + 1)))
       } catch (error) {
+        // 中间件执行过程中出错的异常捕获
         return Promise.reject(error)
       }
     }
