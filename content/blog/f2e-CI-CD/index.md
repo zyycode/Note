@@ -82,7 +82,7 @@ CD：持续部署。代码通过测试评审后，自动部署到生产环境。
 
 ### 部署工具
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a7c4776f-fb6f-40a3-ac22-c547a19d97b8/Untitled.png)
+![Untitled](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/a7c4776f-fb6f-40a3-ac22-c547a19d97b8/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20211230%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211230T073159Z&X-Amz-Expires=86400&X-Amz-Signature=30e3982e484f7a8262a33ffd79051c8055e93eaea3bb46b5dccc2d4d63d63917&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
 
 - 在这四款工具中，Jenkins 是诞生最早也最广为人知的，它的优点在于插件功能丰富且完全开源免费，因此在企业中应用较多。但缺点在于缺少特定语言环境工作流的配置模板，使用成本相对较高。此外，它的服务器需要独立部署和运维。
 - CircleCI 和 Github Actions 都提供了基于容器化的云端服务的能力，提供不同的收费策略以满足普通小型开源项目和大型私有项目的各类需求。两者相比，CircleCI 胜在除了对接 Github 中的项目外，还支持 BitBucket、Heroku 等平台的流程对接。而 Github Actions 则是 Github 项目中内置的 CI/CD 工具，使用成本最低，且提供了矩阵运行、多容器测试、多工作流模板等特色功能。
